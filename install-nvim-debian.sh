@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Get the current user's home directory 
+USER_HOME=$(eval echo "~$USER")
+
 # Function to check if a command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -29,9 +32,31 @@ fi
 # Step 1: Create fonts directory
 mkdir -p ~/.local/share/fonts
 
-# Step 2: Download JetBrains Mono Nerd Font
-echo "Downloading JetBrains Mono Nerd Font..."
-curl -Lo ~/.local/share/fonts/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip
+# Step 2: Check if JetBrains Mono Nerd Font is already installed
+if fc-list | grep -i "JetBrainsMono" >/dev/null 2>&1; then
+    echo "JetBrains Mono Nerd Font is already installed."
+else
+    echo "JetBrains Mono Nerd Font not found. Installing..."
+
+    # Step 2: Create fonts directory
+    mkdir -p ~/.local/share/fonts
+
+    # Step 3: Download JetBrains Mono Nerd Font
+    echo "Downloading JetBrains Mono Nerd Font..."
+    curl -Lo ~/.local/share/fonts/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip
+
+    # Step 4: Unzip the font
+    echo "Unzipping JetBrains Mono Nerd Font..."
+    unzip -o ~/.local/share/fonts/JetBrainsMono.zip -d ~/.local/share/fonts
+
+    # Step 5: Refresh the font cache
+    echo "Refreshing font cache..."
+    fc-cache -fv
+
+    # Step 6: Verify the font installation
+    echo "Verifying font installation..."
+    fc-list | grep -i "JetBrainsMono" || echo "JetBrains Mono Nerd Font not found in system fonts."
+fi
 
 # Step 3: Unzip the font
 echo "Unzipping JetBrains Mono Nerd Font..."
@@ -66,13 +91,22 @@ sudo chmod +x /usr/local/bin/gdu
 # Install bottom (system monitoring tool)
 sudo wget -qO- https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-musl.tar.gz | tar xvz -C /usr/local/bin --strip-components 1 btm
 
-# Step 7: Clean existing Neovim configurations
-echo "Removing existing Neovim configuration..."
-rm -rf ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
+# Step 8: Clean existing Neovim configurations 
+echo "Removing existing Neovim configuration..." 
+rm -rf "$USER_HOME/.config/nvim" "$USER_HOME/.local/share/nvim" "$USER_HOME/.local/state/nvim" "$USER_HOME/.cache/nvim" 
 
-# Step 8: Clone new Neovim configuration from GitHub
-echo "Cloning Neovim configuration..."
-git clone git@github.com:nevalions/nvim.git ~/.config/nvim
+# Step 9: Clone new Neovim configuration from GitHub 
+echo "Cloning Neovim configuration..." 
+git clone git@github.com:nevalions/nvim.git "$USER_HOME/.config/nvim"
+
+# Install latest Neovim if not updated
+if [ "$nvim_version" != "0.8.3" ]; then 
+echo "Neovim is outdated or missing. Updating Neovim..." 
+sudo apt remove neovim 
+sudo add-apt-repository ppa:neovim-ppa/stable -y 
+sudo apt update && sudo apt install -y neovim 
+fi
+
 
 # Step 9: Launch Neovim
 echo "Launching Neovim..."
