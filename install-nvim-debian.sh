@@ -72,7 +72,7 @@ rm -rf ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
 
 # Step 8: Clone new Neovim configuration from GitHub
 echo "Cloning Neovim configuration..."
-git clone https://github.com/nevalions/nvim.git ~/.config/nvim
+git clone git@github.com:nevalions/nvim.git ~/.config/nvim
 
 # Step 9: Launch Neovim
 echo "Launching Neovim..."
