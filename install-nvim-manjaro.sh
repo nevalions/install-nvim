@@ -48,7 +48,7 @@ sudo pacman -Syu
 
 # Step 7: Install necessary packages
 echo "Installing packages with pacman..."
-sudo pacman -S --needed neovim nodejs npm ripgrep lazygit gdu bottom python xclip
+sudo pacman -S --needed neovim nodejs npm ripgrep lazygit gdu bottom python xclip fzf
 
 # Step 8: Clean existing Neovim configurations
 echo "Removing existing Neovim configuration..."

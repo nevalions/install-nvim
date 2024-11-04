@@ -50,7 +50,7 @@ echo "Updating package list..."
 sudo apt update
 
 echo "Installing packages with apt..."
-sudo apt install -y neovim nodejs npm ripgrep git xclip python3-pip
+sudo apt install -y neovim nodejs npm ripgrep git xclip python3-pip fzf
 
 # Additional Debian/Ubuntu tools (substitute `lazygit`, `gdu`, `bottom` if not in official repos)
 echo "Installing lazygit, gdu, and bottom from third-party repos..."
