@@ -58,24 +58,12 @@ else
     fc-list | grep -i "JetBrainsMono" || echo "JetBrains Mono Nerd Font not found in system fonts."
 fi
 
-# Step 3: Unzip the font
-echo "Unzipping JetBrains Mono Nerd Font..."
-unzip ~/.local/share/fonts/JetBrainsMono.zip -d ~/.local/share/fonts
-
-# Step 4: Refresh the font cache
-echo "Refreshing font cache..."
-fc-cache -fv
-
-# Step 5: Verify the font installation
-echo "Verifying font installation..."
-fc-list | grep "JetBrainsMono"
-
 # Step 6: Update package list and install necessary packages with apt
 echo "Updating package list..."
 sudo apt update
 
 echo "Installing packages with apt..."
-sudo apt install -y neovim nodejs npm ripgrep git xclip python3-pip fzf
+sudo apt install -y nodejs npm ripgrep git xclip python3-pip fzf
 
 # Additional Debian/Ubuntu tools (substitute `lazygit`, `gdu`, `bottom` if not in official repos)
 echo "Installing lazygit, gdu, and bottom from third-party repos..."
@@ -99,14 +87,20 @@ rm -rf "$USER_HOME/.config/nvim" "$USER_HOME/.local/share/nvim" "$USER_HOME/.loc
 echo "Cloning Neovim configuration..." 
 git clone git@github.com:nevalions/nvim.git "$USER_HOME/.config/nvim"
 
-# Install latest Neovim if not updated
-if [ "$nvim_version" != "0.8.3" ]; then 
-echo "Neovim is outdated or missing. Updating Neovim..." 
-sudo apt remove neovim 
-sudo add-apt-repository ppa:neovim-ppa/stable -y 
-sudo apt update && sudo apt install -y neovim 
-fi
+# Step 1: Install Neovim from source 
+echo "Installing Neovim from source..." 
+sudo apt update 
+sudo apt install -y ninja-build gettext cmake 
 
+# Clone the Neovim repository 
+git clone https://github.com/neovim/neovim.git 
+cd neovim 
+# Check out the latest stable version 
+git checkout v0.9.1 
+# Replace with the latest version 
+# Build and install 
+make CMAKE_BUILD_TYPE=Release 
+sudo make install cd ..
 
 # Step 9: Launch Neovim
 echo "Launching Neovim..."
