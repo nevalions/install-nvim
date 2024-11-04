@@ -79,6 +79,26 @@ sudo chmod +x /usr/local/bin/gdu
 # Install bottom (system monitoring tool)
 sudo wget -qO- https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-musl.tar.gz | tar xvz -C /usr/local/bin --strip-components 1 btm
 
+# Step 10: Check if Neovim is already installed and is the correct version
+NEOVIM_VERSION="0.9.1" 
+# Set this to the version you want 
+if command_exists nvim && [[ "$(nvim --version | head -n 1 | awk '{print $2}')" == "$NEOVIM_VERSION" ]]; then 
+echo "Neovim $NEOVIM_VERSION is already installed." 
+
+else # Install Neovim from source 
+echo "Installing Neovim from source..." 
+sudo apt update 
+sudo apt install -y ninja-build gettext cmake 
+# Clone the Neovim repository 
+git clone https://github.com/neovim/neovim.git 
+cd neovim 
+# Check out the latest stable version 
+git checkout v$NEOVIM_VERSION # Replace with the latest version 
+# Build and install 
+make CMAKE_BUILD_TYPE=Release 
+sudo make install cd .. 
+fi
+
 # Step 8: Clean existing Neovim configurations 
 echo "Removing existing Neovim configuration..." 
 rm -rf "$USER_HOME/.config/nvim" "$USER_HOME/.local/share/nvim" "$USER_HOME/.local/state/nvim" "$USER_HOME/.cache/nvim" 
@@ -86,21 +106,6 @@ rm -rf "$USER_HOME/.config/nvim" "$USER_HOME/.local/share/nvim" "$USER_HOME/.loc
 # Step 9: Clone new Neovim configuration from GitHub 
 echo "Cloning Neovim configuration..." 
 git clone git@github.com:nevalions/nvim.git "$USER_HOME/.config/nvim"
-
-# Step 1: Install Neovim from source 
-echo "Installing Neovim from source..." 
-sudo apt update 
-sudo apt install -y ninja-build gettext cmake 
-
-# Clone the Neovim repository 
-git clone https://github.com/neovim/neovim.git 
-cd neovim 
-# Check out the latest stable version 
-git checkout v0.9.1 
-# Replace with the latest version 
-# Build and install 
-make CMAKE_BUILD_TYPE=Release 
-sudo make install cd ..
 
 # Step 9: Launch Neovim
 echo "Launching Neovim..."
