@@ -80,7 +80,7 @@ sudo chmod +x /usr/local/bin/gdu
 sudo wget -qO- https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-musl.tar.gz | tar xvz -C /usr/local/bin --strip-components 1 btm
 
 # Step 10: Check if Neovim is already installed and is the correct version
-NEOVIM_VERSION="0.9.1" 
+NEOVIM_VERSION="0.9.4" 
 # Set this to the version you want 
 if command_exists nvim && [[ "$(nvim --version | head -n 1 | awk '{print $2}')" == "$NEOVIM_VERSION" ]]; then 
 echo "Neovim $NEOVIM_VERSION is already installed." 
